@@ -5,6 +5,7 @@
       v-for="item in items"
       :key="item"
       @click="$emit('onItemClick', item)"
+      :class="{ isPreview: isPreview }"
     >
       {{ item }}
     </div>
@@ -18,6 +19,10 @@ export default {
       type: Array,
       required: true,
     },
+    isPreview: {
+      type: Boolean,
+      default: false,
+    },
   },
 };
 </script>
@@ -27,5 +32,19 @@ export default {
   margin: 20px;
   display: flex;
   gap: 20px;
+
+  .isPreview {
+    &:before {
+      content: "#";
+    }
+  }
+}
+.tag-item {
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 5px 10px;
+  &:hover {
+    cursor: pointer;
+  }
 }
 </style>

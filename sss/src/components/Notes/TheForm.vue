@@ -10,6 +10,7 @@
 
 <script>
 import TagList from "@/components/UI/TagList";
+
 export default {
   components: { TagList },
   data() {

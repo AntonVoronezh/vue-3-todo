@@ -12,7 +12,20 @@ export default {
   components: { TheForm, TheList },
   data() {
     return {
-      notes: ["1111", "2222", "33333"],
+      notes: [
+        {
+          title: "111111",
+          tags: ["aaaaa"],
+        },
+        {
+          title: "22222",
+          tags: ["bbbbb", "ccccc"],
+        },
+        {
+          title: "33333",
+          tags: [],
+        },
+      ],
     };
   },
   methods: {
