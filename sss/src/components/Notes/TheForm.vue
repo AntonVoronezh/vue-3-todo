@@ -2,7 +2,7 @@
   <div class="note-form-wrap">
     <form class="note-form" @submit.prevent="onSubmit">
       <textarea type="text" required v-model="value" placeholder="" />
-      <TagList />
+      <TagList :items="tags" @onItemClick="handleTagClick"/>
       <button class="btn btnPrimary" type="submit">add new note</button>
     </form>
   </div>
@@ -21,9 +21,11 @@ export default {
   methods: {
     onSubmit() {
       this.$emit("onSubmit", this.value);
-      console.log(this.value);
       this.value = "";
     },
+    handleTagClick(val) {
+      console.log(val)
+    }
   },
 };
 </script>
