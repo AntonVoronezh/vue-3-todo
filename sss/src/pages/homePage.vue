@@ -1,7 +1,13 @@
 <template>
-66
+  {{ getUsers }}
 </template>
 
 <script>
-export default {}
+export default {
+  computed: {
+    getUsers() {
+      return this.$store.getters.getUsers;
+    },
+  },
+};
 </script>
