@@ -4,13 +4,18 @@ export const app = {
 
 export const links = [
   {
-    title: "Home",
+    title: "Записи",
     alias: "home",
     url: "/",
   },
   {
-    title: "About",
-    alias: "about",
-    url: "/about",
+    title: "Новая Запись",
+    alias: "form",
+    url: "/form",
+  },
+  {
+    title: "Тэги",
+    alias: "tags",
+    url: "/tags",
   },
 ];

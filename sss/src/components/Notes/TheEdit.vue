@@ -1,11 +1,12 @@
 <template>
+
   <div class="note-form-wrap">
     <form class="note-form" @submit.prevent="onSubmit">
       <input type="text" required v-model="name" placeholder="название"/>
       <textarea type="text" required v-model="description" placeholder="текст" />
       <input type="number" required v-model="price" placeholder="цена"/>
       <div class="note-radio">
-        <input type="radio" id="on-offer-1" value="true" v-model="onOffer">
+        <input type="radio" id="on-offer-1" value="true" v-model="onOffer" checked>
         <label for="on-offer-1">доступно</label>
         <input type="radio" id="on-offer-2" value="false" v-model="onOffer">
         <label for="on-offer-2">не доступно</label>
@@ -24,9 +25,14 @@ import axios from "axios";
 
 export default {
   components: { TagList },
+  props: ['initialId', 'initialName', 'initialDescription', 'initialPrice', 'initialOnOffer'],
   data() {
     return {
-      value: "",
+      name: this.initialName,
+      description: this.initialDescription,
+      price: this.initialPrice,
+      onOffer: this.initialOnOffer,
+      id: this.initialId,
       tags: ["aaaaa", "bbbbb", "ccccc"],
     };
   },
@@ -40,12 +46,12 @@ export default {
         "on_offer": this.onOffer === 'true'
       }
 
-      await axios.post('http://127.0.0.1:8000/items', {...payload});
+      await axios.put('http://127.0.0.1:8000/item/' + this.initialId, {...payload});
       this.$router.push(`/`);
     },
     handleTagClick(val) {
       console.log(val)
-    }
+    },
   },
 };
 </script>

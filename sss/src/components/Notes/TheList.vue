@@ -1,29 +1,54 @@
 <template>
   <div class="notes-list">
-    <div class="note-item" v-for="(note, index) in items" :key="index">
-      <div class="note-header">
-        <h2>{{ note.title }}</h2>
-        <p @click="$emit('onRemove', index)" class="close">&#10005;</p>
-      </div>
-      <div class="note-footer">
-        <TagList isPreview v-if="note.tags.length" :items="note.tags" />
+    <div v-if="notes.length">
+      <div  class="note-item" v-for="(note, index) in notes" :key="index">
+        <div class="note-header">
+          <h2>{{ note.name }}</h2>
+          <div>
+          <p @click="editNoteById(note.id)" class="close">(E)</p>
+          <p @click="dellNoteById(note.id)" class="close">&#10005;</p>
+          </div>
+        </div>
+          <div class="note-body">{{ note.description }}</div>
+          <div class="note-body">{{ note.price }}</div>
+          <div class="note-body">{{ note.on_offer }}</div>
+        <div class="note-footer">
+<!--          <TagList isPreview v-if="note.tags.length" :items="note.tags" />-->
+        </div>
       </div>
     </div>
+
+    <div v-if="!notes.length">Записей нет</div>
   </div>
 </template>
 
 <script>
-import TagList from "@/components/UI/TagList";
+// import TagList from "@/components/UI/TagList";
+
+import axios from "axios";
 
 export default {
-  components: { TagList },
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    },
+  data() {
+    return {
+      notes: [],
+    };
   },
-  methods: {},
+  methods: {
+    async getAllNotes() {
+      const {data} = await axios.get('http://127.0.0.1:8000/items')
+      this.notes = data
+    },
+    async dellNoteById(id) {
+      await axios.delete('http://127.0.0.1:8000/item/' + id);
+      await this.getAllNotes();
+    },
+    editNoteById(id) {
+      this.$router.push(`edit/${id}`)
+    }
+  },
+  mounted() {
+    this.getAllNotes();
+  }
 };
 </script>
 
