@@ -38,7 +38,8 @@ export default {
   data() {
     return {
       notes: [],
-      sort: ''
+      sortBy: '',
+      sortDirection: 'asc'
     };
   },
   methods: {
@@ -53,9 +54,13 @@ export default {
     editNoteById(id) {
       this.$router.push(`edit/${id}`)
     },
-    async sortByCol(sort) {
-      this.sort = sort
-      const {data} = await axios.get('http://127.0.0.1:8000/sort?order_by=' + sort);
+    async sortByCol(sortBy) {
+      const sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+
+      this.sortBy = sortBy;
+      this.sortDirection = sortDirection;
+
+      const {data} = await axios.get('http://127.0.0.1:8000/sort?order_by=' + sortBy + '&order_direction=' + sortDirection);
       this.notes = data;
     },
   },
