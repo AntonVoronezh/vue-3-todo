@@ -1,6 +1,13 @@
 <template>
   <div class="notes-list">
     <div v-if="notes.length">
+      <div class="sort-wrap">
+        <div class="sort-item" @click="sortByCol('id')">id</div>
+        <div class="sort-item" @click="sortByCol('name')">name</div>
+        <div class="sort-item" @click="sortByCol('description')">description</div>
+        <div class="sort-item" @click="sortByCol('price')">price</div>
+        <div class="sort-item" @click="sortByCol('on_offer')">on_offer</div>
+      </div>
       <div  class="note-item" v-for="(note, index) in notes" :key="index">
         <div class="note-header">
           <h2>{{ note.name }}</h2>
@@ -31,12 +38,13 @@ export default {
   data() {
     return {
       notes: [],
+      sort: ''
     };
   },
   methods: {
     async getAllNotes() {
       const {data} = await axios.get('http://127.0.0.1:8000/items')
-      this.notes = data
+      this.notes = data;
     },
     async dellNoteById(id) {
       await axios.delete('http://127.0.0.1:8000/item/' + id);
@@ -44,7 +52,12 @@ export default {
     },
     editNoteById(id) {
       this.$router.push(`edit/${id}`)
-    }
+    },
+    async sortByCol(sort) {
+      this.sort = sort
+      const {data} = await axios.get('http://127.0.0.1:8000/sort?order_by=' + sort);
+      this.notes = data;
+    },
   },
   mounted() {
     this.getAllNotes();
@@ -71,5 +84,11 @@ export default {
 
 h2 {
   color: blue;
+}
+
+.sort-wrap {
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
 }
 </style>
