@@ -1,4 +1,29 @@
 <template>
+  <div class="search">
+    <input type="text" v-model="search" placeholder="поиск"/>
+    <button class="btn btnPrimary se" @click="getSearch()">ok</button>
+  </div>
+
+  <div class="search">
+    <select v-model="skip">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+    </select>
+    <select v-model="limit">
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+    </select>
+    <button class="btn btnPrimary se" @click="getPagination()">ok</button>
+  </div>
+
+<div v-if="tags.length" class="tags-list">
+  <div  class="tag-item" v-for="(note, index) in tags" :key="index">{{note.name}}</div>
+</div>
+
   <div class="notes-list">
     <div v-if="notes.length">
       <div class="sort-wrap">
@@ -20,7 +45,6 @@
           <div class="note-body">{{ note.price }}</div>
           <div class="note-body">{{ note.on_offer }}</div>
         <div class="note-footer">
-<!--          <TagList isPreview v-if="note.tags.length" :items="note.tags" />-->
         </div>
       </div>
     </div>
@@ -30,16 +54,18 @@
 </template>
 
 <script>
-// import TagList from "@/components/UI/TagList";
-
 import axios from "axios";
 
 export default {
   data() {
     return {
       notes: [],
+      tags: [],
       sortBy: '',
-      sortDirection: 'asc'
+      sortDirection: 'asc',
+      search: '',
+      skip: 0,
+      limit: 1,
     };
   },
   methods: {
@@ -63,9 +89,22 @@ export default {
       const {data} = await axios.get('http://127.0.0.1:8000/sort?order_by=' + sortBy + '&order_direction=' + sortDirection);
       this.notes = data;
     },
+    async getSearch() {
+      const {data} = await axios.get('http://127.0.0.1:8000/search?q=' + this.search);
+      this.notes = data;
+    },
+    async getPagination() {
+      const {data} = await axios.get('http://127.0.0.1:8000/pagination?skip=' + this.skip + '&limit=' + this.limit);
+      this.notes = data;
+    },
+    async getAllTags() {
+      const {data} = await axios.get('http://127.0.0.1:8000/tags')
+      this.tags = data;
+    },
   },
   mounted() {
     this.getAllNotes();
+    this.getAllTags();
   }
 };
 </script>
@@ -93,7 +132,32 @@ h2 {
 
 .sort-wrap {
   margin-bottom: 20px;
+  margin-top: 20px;
   display: flex;
   gap: 10px;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  max-height: 50px;
+}
+
+.se {
+  height: 50px;
+}
+
+.tags-list {
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px
+}
+
+.tag-item {
+  border: 1px solid #ccc;
 }
 </style>
