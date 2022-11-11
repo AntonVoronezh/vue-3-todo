@@ -21,7 +21,7 @@
   </div>
 
 <div v-if="tags.length" class="tags-list">
-  <div  class="tag-item" v-for="(note, index) in tags" :key="index">{{note.name}}</div>
+  <div  class="tag-item" v-for="(note, index) in tags" :key="index" @click="getTag(note.id)">{{note.name}}</div>
 </div>
 
   <div class="notes-list">
@@ -45,6 +45,9 @@
           <div class="note-body">{{ note.price }}</div>
           <div class="note-body">{{ note.on_offer }}</div>
         <div class="note-footer">
+          <div  class="note-item" v-for="(tag, index) in note.tags" :key="index">
+            {{tags.filter(el=>el.id === tag)[0]?.name}}
+          </div>
         </div>
       </div>
     </div>
@@ -101,10 +104,14 @@ export default {
       const {data} = await axios.get('http://127.0.0.1:8000/tags')
       this.tags = data;
     },
+    async getTag(id) {
+      const {data} = await axios.get('http://127.0.0.1:8000/tags/filter/' + id)
+      this.tags = data;
+    },
   },
   mounted() {
-    this.getAllNotes();
     this.getAllTags();
+    this.getAllNotes();
   }
 };
 </script>
@@ -160,4 +167,11 @@ h2 {
 .tag-item {
   border: 1px solid #ccc;
 }
+
+.note-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px
+}
+
 </style>
